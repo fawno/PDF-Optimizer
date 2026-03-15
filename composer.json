@@ -1,6 +1,7 @@
 {
     "name": "fawno/pdf-optimizer",
     "description": "PDF Optimizer",
+    "license": "MIT",
     "type": "library",
     "authors": [
         {
