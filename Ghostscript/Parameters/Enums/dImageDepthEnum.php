@@ -1,9 +1,9 @@
 <?php
 	declare(strict_types=1);
 
-	namespace Fawno\Ghostscript\Parameters;
+	namespace Fawno\Ghostscript\Parameters\Enums;
 
-	enum dImageDepth : int {
+	enum dImageDepthEnum : int {
 		case ONE       = 1;
 		case TWO       = 2;
 		case FOUR      = 4;

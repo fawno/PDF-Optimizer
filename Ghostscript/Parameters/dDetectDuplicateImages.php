@@ -1,0 +1,34 @@
+<?php
+	declare(strict_types=1);
+
+	namespace Fawno\Ghostscript\Parameters;
+
+	use Fawno\Ghostscript\Attributes\Option;
+
+	trait dDetectDuplicateImages {
+		#[Option('-dDetectDuplicateImages')]
+		protected ?bool $dDetectDuplicateImages = null;
+
+		/**
+		 * DetectDuplicateImages
+		 *
+		 * Takes a Boolean argument, when set to true (the default) pdfwrite will compare all
+		 * new images with all the images encountered to date (NOT small images which are
+		 * stored in-line) to see if the new image is a duplicate of an earlier one.
+		 * If it is a duplicate then instead of writing a new image into the PDF file,
+		 * the PDF will reuse the reference to the earlier image. This can considerably reduce
+		 * the size of the output PDF file, but increases the time taken to process the file.
+		 *
+		 * This time grows exponentially as more images are added, and on large input files with
+		 * numerous images can be prohibitively slow. Setting this to false will improve
+		 * performance at the cost of final file size.
+		 *
+		 * @param null|bool $dDetectDuplicateImages
+		 * @return GhostscriptParameters
+		 */
+		public function detectDuplicateImages (?bool $dDetectDuplicateImages) : self {
+			$this->dDetectDuplicateImages = $dDetectDuplicateImages;
+
+			return $this;
+		}
+	}

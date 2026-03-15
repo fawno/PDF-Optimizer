@@ -3,8 +3,16 @@
 
 	namespace Fawno\Ghostscript\Parameters;
 
-	enum dAutoRotatePages : string {
-		case NONE         = '/None';
-		case ALL          = '/All';
-		case PAGE_BY_PAGE = '/PageByPage';
+	use Fawno\Ghostscript\Attributes\Option;
+	use Fawno\Ghostscript\Parameters\Enums\dAutoRotatePagesEnum;
+
+	trait dAutoRotatePages {
+		#[Option('-dAutoRotatePages')]
+		protected ?dAutoRotatePagesEnum $dAutoRotatePages = null;
+
+		public function autoRotatePages (?dAutoRotatePagesEnum $dAutoRotatePages) : self {
+			$this->dAutoRotatePages = $dAutoRotatePages;
+
+			return $this;
+		}
 	}

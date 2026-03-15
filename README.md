@@ -35,15 +35,15 @@ php composer.phar require "fawno/pdf-optimizer"
 
   use Fawno\Ghostscript\Ghostscript;
   use Fawno\Ghostscript\GhostscriptParameters;
-  use Fawno\Ghostscript\Parameters\dPDFSETTINGS;
-  use Fawno\Ghostscript\Parameters\sDEVICE;
+	use Fawno\Ghostscript\Parameters\Enums\dPDFSETTINGSEnum;
+	use Fawno\Ghostscript\Parameters\Enums\sDEVICEEnum;
   use Fawno\PDFOptimizer\PDFOptimizerGhostscript;
 
   const GS_BIN = '/usr/gs/bin/gswin64c.exe';
 
   $params = GhostscriptParameters::create()
-    ->device(sDEVICE::PDFWRITE)
-    ->pdfSettings(dPDFSETTINGS::EBOOK)
+    ->device(sDEVICEEnum::PDFWRITE)
+    ->pdfSettings(dPDFSETTINGSEnum::EBOOK)
   ;
 
   $gs = Ghostscript::create(GS_BIN)->set_bypass_shell(true)->set_create_process_group(true);
@@ -67,16 +67,16 @@ php composer.phar require "fawno/pdf-optimizer"
 
   use Fawno\Ghostscript\GhostscriptAPI;
   use Fawno\Ghostscript\GhostscriptParameters;
-  use Fawno\Ghostscript\Parameters\dPDFSETTINGS;
-  use Fawno\Ghostscript\Parameters\sDEVICE;
+	use Fawno\Ghostscript\Parameters\Enums\dPDFSETTINGSEnum;
+	use Fawno\Ghostscript\Parameters\Enums\sDEVICEEnum;
   use Fawno\Ghostscript\Type\GhostscriptArgumentEncoding;
   use Fawno\PDFOptimizer\PDFOptimizerGhostscript;
 
   const GS_LIB = '/usr/gs/bin/gsdll64.dll';
 
   $params = GhostscriptParameters::create()
-    ->device(sDEVICE::PDFWRITE)
-    ->pdfSettings(dPDFSETTINGS::EBOOK)
+    ->device(sDEVICEEnum::PDFWRITE)
+    ->pdfSettings(dPDFSETTINGSEnum::EBOOK)
   ;
 
   $gs = GhostscriptAPI::create(GS_LIB)->set_arg_encoding(GhostscriptArgumentEncoding::UTF8);

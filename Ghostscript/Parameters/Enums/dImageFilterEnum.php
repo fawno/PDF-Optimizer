@@ -1,9 +1,9 @@
 <?php
 	declare(strict_types=1);
 
-	namespace Fawno\Ghostscript\Parameters;
+	namespace Fawno\Ghostscript\Parameters\Enums;
 
-	enum dImageFilter : string {
+	enum dImageFilterEnum : string {
 		case JPEG = '/DCTEncode';
 		case ZIP  = '/FlateEncode';
 	}

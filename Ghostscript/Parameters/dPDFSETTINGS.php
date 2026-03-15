@@ -3,10 +3,16 @@
 
 	namespace Fawno\Ghostscript\Parameters;
 
-	enum dPDFSETTINGS : string {
-		case SCREEN   = '/screen';
-		case EBOOK    = '/ebook';
-		case PRINTER  = '/printer';
-		case PREPRESS = '/prepress';
-		case DEFAULT  = '/default';
+	use Fawno\Ghostscript\Attributes\Option;
+	use Fawno\Ghostscript\Parameters\Enums\dPDFSETTINGSEnum;
+
+	trait dPDFSETTINGS {
+		#[Option('-dPDFSETTINGS')]
+		protected dPDFSETTINGSEnum $dPDFSETTINGS = dPDFSETTINGSEnum::EBOOK;
+
+		public function pdfSettings (dPDFSETTINGSEnum $dPDFSETTINGS) : self {
+			$this->dPDFSETTINGS = $dPDFSETTINGS;
+
+			return $this;
+		}
 	}

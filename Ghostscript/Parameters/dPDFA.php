@@ -3,11 +3,24 @@
 
 	namespace Fawno\Ghostscript\Parameters;
 
-	enum dPDFA : int {
-		/** PDF/A-1 */
-		case PDFA1 = 1;
-		/** PDF/A-2 */
-		case PDFA2 = 2;
-		/** PDF/A-3 */
-		case PDFA3 = 3;
+	use Fawno\Ghostscript\Attributes\Option;
+	use Fawno\Ghostscript\Parameters\Enums\dPDFAEnum;
+
+	trait dPDFA {
+		#[Option('-dPDFA')]
+		protected ?dPDFAEnum $dPDFA = null;
+
+		/**
+		 * PDFA
+		 *
+		 * Specify the PDF/A-1, PDF/A-2 or PDF/A-3.
+		 *
+		 * @param null|dPDFAEnum $dPDFA
+		 * @return GhostscriptParameters
+		 */
+		public function PDFA (?dPDFAEnum $dPDFA) : self {
+			$this->dPDFA = $dPDFA;
+
+			return $this;
+		}
 	}

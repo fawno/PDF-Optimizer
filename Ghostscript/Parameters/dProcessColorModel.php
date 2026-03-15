@@ -3,8 +3,16 @@
 
 	namespace Fawno\Ghostscript\Parameters;
 
-	enum dProcessColorModel : string {
-		case GRAY = '/DeviceGray';
-		case RGB  = '/DeviceRGB';
-		case CMYK = '/DeviceCMYK';
+	use Fawno\Ghostscript\Attributes\Option;
+	use Fawno\Ghostscript\Parameters\Enums\dProcessColorModelEnum;
+
+	trait dProcessColorModel {
+		#[Option('-dProcessColorModel')]
+		protected ?dProcessColorModelEnum $dProcessColorModel = dProcessColorModelEnum::RGB;
+
+		public function processColorModel (?dProcessColorModelEnum $dProcessColorModel) : self {
+			$this->dProcessColorModel = $dProcessColorModel;
+
+			return $this;
+		}
 	}

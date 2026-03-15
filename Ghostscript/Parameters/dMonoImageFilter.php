@@ -3,8 +3,17 @@
 
 	namespace Fawno\Ghostscript\Parameters;
 
-	enum dMonoImageFilter: string {
-		case CCITT      = '/CCITTFaxEncode';
-		case FLATE      = '/FlateEncode';
-		case RUN_LENGTH = '/RunLengthEncode';
+	use Fawno\Ghostscript\Attributes\Option;
+	use Fawno\Ghostscript\Parameters\Enums\dMonoImageFilterEnum;
+
+	trait dMonoImageFilter {
+		#[Option('-dMonoImageFilter')]
+		protected ?dMonoImageFilterEnum $dMonoImageFilter = null;
+
+		public function monoImageFilter (?dMonoImageFilterEnum $dMonoImageFilter) : self {
+			$this->dMonoImageFilter = $dMonoImageFilter;
+
+			return $this;
+		}
+
 	}
