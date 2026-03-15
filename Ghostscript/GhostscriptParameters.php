@@ -663,8 +663,6 @@
 						$instance = $attribute->newInstance();
 						$parameters[] = $instance->name;
 					}
-
-					continue;
 				}
 
 				$attributes = $property->getAttributes(ShortOption::class);
