@@ -155,36 +155,29 @@
 					continue;
 				}
 
+				if (false === $attribute = current($property->getAttributes())) {
+					continue;
+				}
+
 				$value = is_a($value, BackedEnum::class) ? $value->value : $value;
 
-				$attributes = $property->getAttributes(Flag::class);
-				foreach ($attributes as $attribute) {
-					if ($value === true) {
-						$instance = $attribute->newInstance();
-						$parameters[] = $instance->name;
-					}
+				if (is_bool($value)) {
+					$value = $value ? 'true' : 'false';
 				}
 
-				$attributes = $property->getAttributes(ShortOption::class);
-				foreach ($attributes as $attribute) {
-					$instance = $attribute->newInstance();
-
-					if (is_bool($value)) {
-						$value = $value ? 'true' : 'false';
-					}
-
-					$parameters[] = $instance->name . $value;
-				}
-
-				$attributes = $property->getAttributes(Option::class);
-				foreach ($attributes as $attribute) {
-					$instance = $attribute->newInstance();
-
-					if (is_bool($value)) {
-						$value = $value ? 'true' : 'false';
-					}
-
-					$parameters[] = $instance->name . '=' . $value;
+				$attribute = $attribute->newInstance();
+				switch ($attribute::class) {
+					case Flag::class:
+						if ($value === 'true') {
+							$parameters[] = $attribute->name;
+						}
+						break;
+					case ShortOption::class:
+						$parameters[] = $attribute->name . $value;
+						break;
+					case Option::class:
+						$parameters[] = $attribute->name . '=' . $value;
+						break;
 				}
 			}
 
