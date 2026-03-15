@@ -3,6 +3,11 @@
 
 	namespace Fawno\Ghostscript\Parameters;
 
+	/**
+	 * Ghostscript Devices
+	 *
+	 * https://www.gnu.org/software/ghostscript/devices.html
+	 */
 	enum sDEVICE : string {
 		/**
 		 * High-level (vector) file formats
