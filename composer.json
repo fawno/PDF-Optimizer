@@ -1,0 +1,50 @@
+{
+    "name": "fawno/pdf-optimizer",
+    "description": "PDF Optimizer",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Fernando Herrero",
+            "homepage": "https://lab.fawno.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=8.3.0"
+    },
+    "suggest": {
+        "ext-ffi": "Needed for use GhostscriptAPI Library"
+    },
+    "autoload": {
+        "psr-4": {
+            "Fawno\\Ghostscript\\": "Ghostscript",
+            "Fawno\\PDFOptimizer\\": "src"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "@stable"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Fawno\\PDFOptimizer\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit"
+    },
+    "scripts-descriptions": {
+        "test": "Run PHPUnit tests"
+    },
+    "config": {
+        "archive-format": "zip",
+        "archive-dir": "archive"
+    },
+    "archive": {
+      "exclude": [
+          "/archive",
+          "!.gitkeep",
+          "!empty",
+          "/vendors"
+      ]
+    }
+}
