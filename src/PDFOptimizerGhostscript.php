@@ -1,12 +1,11 @@
 <?php
-  declare(strict_types=1);
+	declare(strict_types=1);
 
 	namespace Fawno\PDFOptimizer;
 
 	use Fawno\Ghostscript\Ghostscript;
 	use Fawno\Ghostscript\GhostscriptAPI;
-	use Fawno\Ghostscript\Type\GSAPIParameter;
-	use Fawno\Ghostscript\Type\GSAPIParameters;
+	use Fawno\Ghostscript\GhostscriptParameters;
 
 	class PDFOptimizerGhostscript {
 		private function __construct (protected Ghostscript|GhostscriptAPI $gs) {}
@@ -15,19 +14,12 @@
 			return new self($gs);
 		}
 
-		public function optimize (string $original, string $optimized, GSAPIParameters $arguments, ?string &$stdout, ?string &$stderr) : int {
+		public function optimize (?string $original, ?string $optimized, GhostscriptParameters $arguments, ?string &$stdout, ?string &$stderr) : int {
 			if ($this->gs instanceof Ghostscript) {
-				$original = '"' . $original . '"';
-				$optimized = '"' . $optimized . '"';
+				$original = $original ? '"' . $original . '"' : null;
+				$optimized = $optimized ? '"' . $optimized . '"' : null;
 			}
 
-			$arguments = $arguments->copy();
-			$arguments->append(
-				GSAPIParameter::create('sOutputFile', $optimized),
-				GSAPIParameter::create('', $original),
-			);
-
-			return $this->gs->run($arguments, $stdout, $stderr);
-			return 0;
+			return $this->gs->run($arguments->getParameters($original, $optimized), $stdout, $stderr);
 		}
 	}

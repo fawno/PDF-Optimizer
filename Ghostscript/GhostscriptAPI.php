@@ -3,8 +3,7 @@
 
 	namespace Fawno\Ghostscript;
 
-	use Fawno\Ghostscript\Type\GSAPIArgEncoding;
-	use Fawno\Ghostscript\Type\GSAPIParameters;
+	use Fawno\Ghostscript\Type\GhostscriptArgumentEncoding;
 	use Fawno\Ghostscript\Type\GSAPIRevision;
 	use FFI;
 	use FFI\CData;
@@ -97,7 +96,7 @@
 		EOT;
 
 		protected ?CData $instance = null;
-		protected GSAPIArgEncoding $encoding = GSAPIArgEncoding::Local;
+		protected GhostscriptArgumentEncoding $encoding = GhostscriptArgumentEncoding::Local;
 
 		protected function __construct (protected FFI $ffi) {
 		}
@@ -112,7 +111,7 @@
 			return new self($ffi);
 		}
 
-		public function set_arg_encoding (GSAPIArgEncoding $encoding) : self {
+		public function set_arg_encoding (GhostscriptArgumentEncoding $encoding) : self {
 			$this->encoding = $encoding;
 
 			return $this;
@@ -121,12 +120,12 @@
 		/**
 		 * Run GS with params
 		 *
-		 * @param GSAPIParameters $arguments
+		 * @param array $arguments
 		 * @param null|string &$stdout
 		 * @param null|string &$stderr
 		 * @return int
 		 */
-		public function run (GSAPIParameters $arguments, ?string &$stdout, ?string &$stderr) : int {
+		public function run (array $arguments, ?string &$stdout, ?string &$stderr) : int {
 			$stdout = '';
 			$stderr = '';
 
@@ -268,10 +267,10 @@
 		 * Use of this API (gsapi) with 'local' encodings (and hence without calling
 		 * this function) is now deprecated!
 		 *
-		 * @param GSAPIArgEncoding $encoding
+		 * @param GhostscriptArgumentEncoding $encoding
 		 * @return int
 		 */
-		public function gsapi_set_arg_encoding (GSAPIArgEncoding $encoding) : int {
+		public function gsapi_set_arg_encoding (GhostscriptArgumentEncoding $encoding) : int {
 			return $this->ffi->gsapi_set_arg_encoding($this->instance, $encoding->value);
 		}
 
@@ -289,12 +288,10 @@
 		 *    call one or more gsapi_run_*() functions and then finish
 		 *    with gsapi_exit().
 		 *
-		 * @param GSAPIParameters $arguments
+		 * @param array $arguments
 		 * @return int
 		 */
-		public function gsapi_init_with_args (GSAPIParameters $arguments) : int {
-			//$arguments = array_merge(['', '-dSAFER', '-dBATCH', '-dNOPAUSE'], $arguments->getParameters());
-			$arguments = $arguments->getParameters();
+		public function gsapi_init_with_args (array $arguments) : int {
 			array_unshift($arguments, '');
 			$argc = count($arguments);
 			$argv = $this->argsPtr($arguments);

@@ -3,8 +3,6 @@
 
 	namespace Fawno\Ghostscript;
 
-	use Fawno\Ghostscript\Type\GSAPIParameters;
-
 	class Ghostscript {
 		protected ?string $run_cwd = null;
 		protected ?array $run_env_vars = null;
@@ -75,13 +73,13 @@
 		/**
 		 * Run GS with params
 		 *
-		 * @param GSAPIParameters $arguments
+		 * @param array $arguments
 		 * @param null|string &$stdout
 		 * @param null|string &$stderr
 		 * @return int
 		 */
-		public function run (GSAPIParameters $arguments, ?string &$stdout, ?string &$stderr) : int {
-			$arguments = implode(' ', $arguments->getParameters());
+		public function run (array $arguments, ?string &$stdout, ?string &$stderr) : int {
+			$arguments = implode(' ', $arguments);
 			$cmd = $this->gsbin_path . ' ' . $arguments;
 
 			$descriptorspec = [

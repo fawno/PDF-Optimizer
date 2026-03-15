@@ -33,33 +33,30 @@ php composer.phar require "fawno/pdf-optimizer"
 <?php
   require __DIR__ . '/vendor/autoload.php';
 
-	use Fawno\Ghostscript\Ghostscript;
-	use Fawno\Ghostscript\Type\GSAPIParameter;
-	use Fawno\Ghostscript\Type\GSAPIParameters;
-	use Fawno\PDFOptimizer\PDFOptimizerGhostscript;
+  use Fawno\Ghostscript\Ghostscript;
+  use Fawno\Ghostscript\GhostscriptParameters;
+  use Fawno\Ghostscript\Parameters\dPDFSETTINGS;
+  use Fawno\Ghostscript\Parameters\sDEVICE;
+  use Fawno\PDFOptimizer\PDFOptimizerGhostscript;
 
-	const GS_BIN = '/usr/gs/bin/gswin64c.exe';
+  const GS_BIN = '/usr/gs/bin/gswin64c.exe';
 
-	$params = GSAPIParameters::create(
-		//GSAPIParameter::create('q'),
-		GSAPIParameter::create('dSAFER'),
-		GSAPIParameter::create('dBATCH'),
-		GSAPIParameter::create('dNOPAUSE'),
-		GSAPIParameter::create('sDEVICE', 'pdfwrite'),
-		GSAPIParameter::create('dPDFSETTINGS', '/ebook'),
-	);
+  $params = GhostscriptParameters::create()
+    ->device(sDEVICE::PDFWRITE)
+    ->pdfSettings(dPDFSETTINGS::EBOOK)
+  ;
 
-	$gs = Ghostscript::create(GS_BIN)->set_bypass_shell(true)->set_create_process_group(true);
-	$optimizer = PDFOptimizerGhostscript::create($gs);
+  $gs = Ghostscript::create(GS_BIN)->set_bypass_shell(true)->set_create_process_group(true);
+  $optimizer = PDFOptimizerGhostscript::create($gs);
 
-	$code = $optimizer->optimize('original.pdf', 'optimized.pdf', $params, $stdout, $stderr);
+  $code = $optimizer->optimize('original.pdf', 'optimized.pdf', $params, $stdout, $stderr);
 
-	echo '***** OUTPUT:', PHP_EOL;
-	echo $stdout, PHP_EOL;
-	if ($code) {
-		echo '***** ERROR:', PHP_EOL;
-		echo $stderr, PHP_EOL;
-	}
+  echo '***** OUTPUT:', PHP_EOL;
+  echo $stdout, PHP_EOL;
+  if ($code) {
+    echo '***** ERROR:', PHP_EOL;
+    echo $stderr, PHP_EOL;
+  }
 ```
 
 ## Example with GS library
@@ -68,32 +65,29 @@ php composer.phar require "fawno/pdf-optimizer"
 <?php
   require __DIR__ . '/vendor/autoload.php';
 
-	use Fawno\Ghostscript\GhostscriptAPI;
-	use Fawno\Ghostscript\Type\GSAPIArgEncoding;
-	use Fawno\Ghostscript\Type\GSAPIParameter;
-	use Fawno\Ghostscript\Type\GSAPIParameters;
-	use Fawno\PDFOptimizer\PDFOptimizerGhostscript;
+  use Fawno\Ghostscript\GhostscriptAPI;
+  use Fawno\Ghostscript\GhostscriptParameters;
+  use Fawno\Ghostscript\Parameters\dPDFSETTINGS;
+  use Fawno\Ghostscript\Parameters\sDEVICE;
+  use Fawno\Ghostscript\Type\GhostscriptArgumentEncoding;
+  use Fawno\PDFOptimizer\PDFOptimizerGhostscript;
 
-	const GS_LIB = '/usr/gs/bin/gsdll64.dll';
+  const GS_LIB = '/usr/gs/bin/gsdll64.dll';
 
-	$params = GSAPIParameters::create(
-		//GSAPIParameter::create('q'),
-		GSAPIParameter::create('dSAFER'),
-		GSAPIParameter::create('dBATCH'),
-		GSAPIParameter::create('dNOPAUSE'),
-		GSAPIParameter::create('sDEVICE', 'pdfwrite'),
-		GSAPIParameter::create('dPDFSETTINGS', '/ebook'),
-	);
+  $params = GhostscriptParameters::create()
+    ->device(sDEVICE::PDFWRITE)
+    ->pdfSettings(dPDFSETTINGS::EBOOK)
+  ;
 
-	$gs = GhostscriptAPI::create(GS_LIB)->set_arg_encoding(GSAPIArgEncoding::UTF8);
-	$optimizer = PDFOptimizerGhostscript::create($gs);
+  $gs = GhostscriptAPI::create(GS_LIB)->set_arg_encoding(GhostscriptArgumentEncoding::UTF8);
+  $optimizer = PDFOptimizerGhostscript::create($gs);
 
-	$code = $optimizer->optimize('original.pdf', 'optimized.pdf', $params, $stdout, $stderr);
+  $code = $optimizer->optimize('original.pdf', 'optimized.pdf', $params, $stdout, $stderr);
 
-	echo '***** OUTPUT:', PHP_EOL;
-	echo $stdout, PHP_EOL;
-	if ($code) {
-		echo '***** ERROR:', PHP_EOL;
-		echo $stderr, PHP_EOL;
-	}
+  echo '***** OUTPUT:', PHP_EOL;
+  echo $stdout, PHP_EOL;
+  if ($code) {
+    echo '***** ERROR:', PHP_EOL;
+    echo $stderr, PHP_EOL;
+  }
 ```
