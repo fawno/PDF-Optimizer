@@ -18,9 +18,9 @@
 		/** PDF output (like Adobe Acrobat Distiller) */
 		case PDFWRITE = 'pdfwrite';
 		/** PostScript output (like PostScript Distillery) */
-		case PSWRITE = 'pswrite' ;
+		case PSWRITE = 'pswrite';
 		/** Black-and-white PCL XL */
-		case PXLMONO = 'pxlmono' ;
+		case PXLMONO = 'pxlmono';
 		/** Color PCL XL */
 		case PXLCOLOR = 'pxlcolor';
 
