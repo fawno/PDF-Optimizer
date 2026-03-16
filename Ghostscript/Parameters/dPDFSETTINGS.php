@@ -8,9 +8,9 @@
 
 	trait dPDFSETTINGS {
 		#[Option('-dPDFSETTINGS')]
-		protected dPDFSETTINGSEnum $dPDFSETTINGS = dPDFSETTINGSEnum::EBOOK;
+		protected ?dPDFSETTINGSEnum $dPDFSETTINGS = dPDFSETTINGSEnum::EBOOK;
 
-		public function pdfSettings (dPDFSETTINGSEnum $dPDFSETTINGS) : self {
+		public function pdfSettings (?dPDFSETTINGSEnum $dPDFSETTINGS) : self {
 			$this->dPDFSETTINGS = $dPDFSETTINGS;
 
 			return $this;

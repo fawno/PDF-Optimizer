@@ -8,9 +8,9 @@
 
 	trait sDEVICE {
 		#[Option('-sDEVICE')]
-		protected sDEVICEEnum $sDEVICE = sDEVICEEnum::PDFWRITE;
+		protected ?sDEVICEEnum $sDEVICE = sDEVICEEnum::PDFWRITE;
 
-		public function device (sDEVICEEnum $sDEVICE) : self {
+		public function device (?sDEVICEEnum $sDEVICE) : self {
 			$this->sDEVICE = $sDEVICE;
 
 			return $this;
