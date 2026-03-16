@@ -70,6 +70,7 @@
 	use Fawno\Ghostscript\Parameters\r;
 	use Fawno\Ghostscript\Parameters\sColorConversionStrategy;
 	use Fawno\Ghostscript\Parameters\sDEVICE;
+	use Fawno\Ghostscript\Parameters\stdin;
 	use Fawno\Ghostscript\Type\GSAPIParameter;
 	use ReflectionClass;
 	use ReflectionProperty;
@@ -138,6 +139,7 @@
 		use dFIXEDRESOLUTION;
 		use dNOPROMPT;
 		use help;
+		use stdin;
 
 		protected array $parameters = [];
 
