@@ -125,14 +125,22 @@
 		 * @param null|string &$stderr
 		 * @return int
 		 */
-		public function run (array $arguments, ?string &$stdout, ?string &$stderr) : int {
+		public function run (array $arguments, ?string &$stdout, ?string &$stderr, ?string $stdin = null) : int {
 			$stdout = '';
 			$stderr = '';
 
 			$this->gsapi_new_instance();
 
 			$this->gsapi_set_stdio(
-				null,
+				function(mixed $caller, CData $buffer, int $len) use (&$stdin) : int {
+					if (!$len or !$stdin) {
+						return 0;
+					}
+
+					FFI::memcpy($buffer, $stdin, 1);
+					$stdin = substr($stdin, 1);
+					return 1;
+				},
 				function(mixed $caller, string $buffer, int $len) use (&$stdout) : int {
 					$stdout .= substr($buffer, 0, $len);
 					return $len;
@@ -248,9 +256,9 @@
 		 * the number of characters written.
 		 * If a callback address is NULL, the real stdio will be used.
 		 *
-		 * @param object $stdin_fn function(mixed $caller_handle, string $buffer, int $len) {}
-		 * @param object $stdout_fn function(mixed $caller_handle, string $buffer, int $len) { return $len; }
-		 * @param object $stderr_fn function(mixed $caller_handle, string $buffer, int $len) { return $len; }
+		 * @param object $stdin_fn function(mixed $caller_handle, CData $buffer, int $len) : int { return $len; }
+		 * @param object $stdout_fn function(mixed $caller_handle, string $buffer, int $len) : int { return $len; }
+		 * @param object $stderr_fn function(mixed $caller_handle, string $buffer, int $len) : int { return $len; }
 		 * @return int
 		 */
 		public function gsapi_set_stdio (?object $stdin_fn = null, ?object $stdout_fn = null, ?object $stderr_fn = null) : int  {
