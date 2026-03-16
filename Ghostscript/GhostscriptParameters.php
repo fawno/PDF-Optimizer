@@ -46,6 +46,7 @@
 	use Fawno\Ghostscript\Parameters\dMonoImageFilter;
 	use Fawno\Ghostscript\Parameters\dMonoImageResolution;
 	use Fawno\Ghostscript\Parameters\dNOPAUSE;
+	use Fawno\Ghostscript\Parameters\dNOPROMPT;
 	use Fawno\Ghostscript\Parameters\dParseDSCComments;
 	use Fawno\Ghostscript\Parameters\dParseDSCCommentsForDocInfo;
 	use Fawno\Ghostscript\Parameters\dPassThroughJPEGImages;
@@ -65,11 +66,13 @@
 	use Fawno\Ghostscript\Parameters\dSubsetFonts;
 	use Fawno\Ghostscript\Parameters\dUCRandBGInfo;
 	use Fawno\Ghostscript\Parameters\dUseFlateCompression;
+	use Fawno\Ghostscript\Parameters\help;
 	use Fawno\Ghostscript\Parameters\r;
 	use Fawno\Ghostscript\Parameters\sColorConversionStrategy;
 	use Fawno\Ghostscript\Parameters\sDEVICE;
 	use Fawno\Ghostscript\Type\GSAPIParameter;
 	use ReflectionClass;
+	use ReflectionProperty;
 
 	class GhostscriptParameters {
 		use dQUIET;
@@ -133,6 +136,8 @@
 		use dDefaultRenderingIntent;
 		use r;
 		use dFIXEDRESOLUTION;
+		use dNOPROMPT;
+		use help;
 
 		protected array $parameters = [];
 
@@ -146,23 +151,28 @@
 			return $this;
 		}
 
+		protected function getValue (ReflectionProperty $property) : mixed {
+			$value = $property->getValue($this);
+			$value = is_a($value, BackedEnum::class) ? $value->value : $value;
+
+			if (is_bool($value)) {
+				$value = $value ? 'true' : 'false';
+			}
+
+			return $value;
+		}
+
 		public function getParameters (?string $inputFile = null, ?string $outputFile = null) : array {
 			$parameters = [];
 
 			$reflection = new ReflectionClass($this);
 			foreach ($reflection->getProperties() as $property) {
-				if (null === $value = $property->getValue($this)) {
+				if (null === $value = $this->getValue($property)) {
 					continue;
 				}
 
 				if (false === $attribute = current($property->getAttributes())) {
 					continue;
-				}
-
-				$value = is_a($value, BackedEnum::class) ? $value->value : $value;
-
-				if (is_bool($value)) {
-					$value = $value ? 'true' : 'false';
 				}
 
 				$attribute = $attribute->newInstance();
