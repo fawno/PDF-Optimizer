@@ -78,7 +78,7 @@
 		 * @param null|string &$stderr
 		 * @return int
 		 */
-		public function run (array $arguments, ?string &$stdout, ?string &$stderr) : int {
+		public function run (array $arguments, ?string &$stdout, ?string &$stderr, ?string $stdin = null) : int {
 			$arguments = implode(' ', $arguments);
 			$cmd = $this->gsbin_path . ' ' . $arguments;
 
@@ -88,7 +88,14 @@
 				['pipe', 'w'],
 			];
 
-			$process = proc_open($cmd, $descriptorspec, $pipes, $this->run_cwd, $this->run_env_vars, $this->run_options);
+			if (false === $process = proc_open($cmd, $descriptorspec, $pipes, $this->run_cwd, $this->run_env_vars, $this->run_options)) {
+				return -1;
+			}
+
+			if ($stdin) {
+				fwrite($pipes[0], $stdin);
+				fclose($pipes[0]);
+			}
 
 			do {
 				sleep(1);
