@@ -9,7 +9,7 @@
 		#[Flag('-dNOPAUSE')]
 		protected bool $dNOPAUSE = true;
 
-		public function noPause (bool $dNOPAUSE) : self {
+		public function noPause (bool $dNOPAUSE = true) : self {
 			$this->dNOPAUSE = $dNOPAUSE;
 
 			return $this;

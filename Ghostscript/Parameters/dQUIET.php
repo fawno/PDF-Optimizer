@@ -9,7 +9,7 @@
 		#[Flag('-dQUIET')]
 		protected bool $dQUIET = true;
 
-		public function quiet (bool $dQUIET) : self {
+		public function quiet (bool $dQUIET = true) : self {
 			$this->dQUIET = $dQUIET;
 
 			return $this;

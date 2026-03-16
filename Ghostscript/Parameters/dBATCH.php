@@ -9,7 +9,7 @@
 		#[Flag('-dBATCH')]
 		protected bool $dBATCH = true;
 
-		public function batch (bool $dBATCH) : self {
+		public function batch (bool $dBATCH = true) : self {
 			$this->dBATCH = $dBATCH;
 
 			return $this;

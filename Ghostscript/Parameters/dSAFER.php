@@ -12,7 +12,7 @@
 		#[Flag('-dNOSAFER')]
 		protected bool $dNOSAFER = false;
 
-		public function safer (bool $dSAFER) : self {
+		public function safer (bool $dSAFER = true) : self {
 			$this->dSAFER = $dSAFER;
 			$this->dNOSAFER = !$dSAFER;
 
