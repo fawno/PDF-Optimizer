@@ -99,12 +99,12 @@
 		protected function __construct (protected FFI $ffi) {
 		}
 
-		public static function create (string $lib_path) : self|false {
-			if (!is_file($lib_path)) {
+		public static function create (string $gslib_path) : self|false {
+			if (!is_file($gslib_path)) {
 				return false;
 			}
 
-			$ffi = FFI::cdef(self::HEADER, $lib_path);
+			$ffi = FFI::cdef(self::HEADER, $gslib_path);
 
 			return new self($ffi);
 		}
