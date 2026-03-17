@@ -44,8 +44,12 @@
 
 		case CONFIGURATION_ERROR    =  -26;
 		case UNDEFINED_RESOURCE     =  -27;
-
 		case UNREGISTERED           =  -28;
+
+		/* -----------------------------------------------------------------
+		 * Additional DPS errors
+		 * ----------------------------------------------------------------- */
+
 		case INVALID_CONTEXT        =  -29;
 		case INVALID_ID             =  -30;
 
@@ -54,7 +58,7 @@
 		 * ----------------------------------------------------------------- */
 
 		case PDF_STACK_OVERFLOW     =  -31;
-		case CIRCULAR_REFERENCE     =  -32;
+		case PDF_CIRCULAR_REFERENCE =  -32;
 
 		/* -----------------------------------------------------------------
 		 * Internal / pseudo errors
@@ -98,9 +102,10 @@
 				$this === self::OK                     => 'success',
 				$this === self::QUIT                   => 'success',
 				$this === self::INFO                   => 'success',
-				$this->value >= -25                    => 'postscript',
+				$this->value >= -25                    => 'postscript-level1',
 				$this->value >= -30                    => 'postscript-level2',
 				$this->value >= -32                    => 'pdf',
+				$this === self::FATAL_ERROR            => 'fatal',
 				$this->value <= -101                   => 'internal',
 				default                                => 'unknown',
 			};
@@ -112,87 +117,108 @@
 
 		public function postScriptName () : string {
 			return match ($this) {
-				self::OK                   => 'gs_error_ok',
-				self::UNKNOWN_ERROR        => 'gs_error_unknownerror',
-				self::DICT_FULL            => 'gs_error_dictfull',
-				self::DICT_STACK_OVERFLOW  => 'gs_error_dictstackoverflow',
-				self::DICT_STACK_UNDERFLOW => 'gs_error_dictstackunderflow',
-				self::EXEC_STACK_OVERFLOW  => 'gs_error_execstackoverflow',
-				self::INTERRUPT            => 'gs_error_interrupt',
-				self::INVALID_ACCESS       => 'gs_error_invalidaccess',
-				self::INVALID_EXIT         => 'gs_error_invalidexit',
-				self::INVALID_FILE_ACCESS  => 'gs_error_invalidfileaccess',
-				self::INVALID_FONT         => 'gs_error_invalidfont',
-				self::INVALID_RESTORE      => 'gs_error_invalidrestore',
-				self::IO_ERROR             => 'gs_error_ioerror',
-				self::LIMIT_CHECK          => 'gs_error_limitcheck',
-				self::NO_CURRENT_POINT     => 'gs_error_nocurrentpoint',
-				self::RANGE_CHECK          => 'gs_error_rangecheck',
-				self::STACK_OVERFLOW       => 'gs_error_stackoverflow',
-				self::STACK_UNDERFLOW      => 'gs_error_stackunderflow',
-				self::SYNTAX_ERROR         => 'gs_error_syntaxerror',
-				self::TIMEOUT              => 'gs_error_timeout',
-				self::TYPE_CHECK           => 'gs_error_typecheck',
-				self::UNDEFINED            => 'gs_error_undefined',
-				self::UNDEFINED_FILENAME   => 'gs_error_undefinedfilename',
-				self::UNDEFINED_RESULT     => 'gs_error_undefinedresult',
-				self::UNMATCHED_MARK       => 'gs_error_unmatchedmark',
-				self::VM_ERROR             => 'gs_error_VMerror',
+				self::OK                     => 'gs_error_ok',
+				self::UNKNOWN_ERROR          => 'gs_error_unknownerror',
+				self::DICT_FULL              => 'gs_error_dictfull',
+				self::DICT_STACK_OVERFLOW    => 'gs_error_dictstackoverflow',
+				self::DICT_STACK_UNDERFLOW   => 'gs_error_dictstackunderflow',
+				self::EXEC_STACK_OVERFLOW    => 'gs_error_execstackoverflow',
+				self::INTERRUPT              => 'gs_error_interrupt',
+				self::INVALID_ACCESS         => 'gs_error_invalidaccess',
+				self::INVALID_EXIT           => 'gs_error_invalidexit',
+				self::INVALID_FILE_ACCESS    => 'gs_error_invalidfileaccess',
+				self::INVALID_FONT           => 'gs_error_invalidfont',
+				self::INVALID_RESTORE        => 'gs_error_invalidrestore',
+				self::IO_ERROR               => 'gs_error_ioerror',
+				self::LIMIT_CHECK            => 'gs_error_limitcheck',
+				self::NO_CURRENT_POINT       => 'gs_error_nocurrentpoint',
+				self::RANGE_CHECK            => 'gs_error_rangecheck',
+				self::STACK_OVERFLOW         => 'gs_error_stackoverflow',
+				self::STACK_UNDERFLOW        => 'gs_error_stackunderflow',
+				self::SYNTAX_ERROR           => 'gs_error_syntaxerror',
+				self::TIMEOUT                => 'gs_error_timeout',
+				self::TYPE_CHECK             => 'gs_error_typecheck',
+				self::UNDEFINED              => 'gs_error_undefined',
+				self::UNDEFINED_FILENAME     => 'gs_error_undefinedfilename',
+				self::UNDEFINED_RESULT       => 'gs_error_undefinedresult',
+				self::UNMATCHED_MARK         => 'gs_error_unmatchedmark',
+				self::VM_ERROR               => 'gs_error_VMerror',
 
-				self::CONFIGURATION_ERROR  => 'gs_error_configurationerror',
-				self::UNDEFINED_RESOURCE   => 'gs_error_undefinedresource',
-				self::UNREGISTERED         => 'gs_error_unregistered',
-				self::INVALID_CONTEXT      => 'gs_error_invalidcontext',
-				self::INVALID_ID           => 'gs_error_invalidid',
+				self::CONFIGURATION_ERROR    => 'gs_error_configurationerror',
+				self::UNDEFINED_RESOURCE     => 'gs_error_undefinedresource',
+				self::UNREGISTERED           => 'gs_error_unregistered',
+				self::INVALID_CONTEXT        => 'gs_error_invalidcontext',
+				self::INVALID_ID             => 'gs_error_invalidid',
 
-				self::PDF_STACK_OVERFLOW   => 'gs_error_pdf_stackoverflow',
-				self::CIRCULAR_REFERENCE   => 'gs_error_circular_reference',
+				self::PDF_STACK_OVERFLOW     => 'gs_error_pdf_stackoverflow',
+				self::PDF_CIRCULAR_REFERENCE => 'gs_error_circular_reference',
 
-				self::HIT_DETECTED         => 'gs_error_hit_detected',
+				self::HIT_DETECTED           => 'gs_error_hit_detected',
 
-				self::FATAL_ERROR          => 'gs_error_Fatal',
-				self::QUIT                 => 'gs_error_Quit',
-				self::INTERPRETER_EXIT     => 'gs_error_InterpreterExit',
-				self::REMAP_COLOR          => 'gs_error_Remap_Color',
-				self::EXEC_STACK_UNDERFLOW => 'gs_error_ExecStackUnderflow',
-				self::VM_RECLAIM           => 'gs_error_VMreclaim',
-				self::NEED_INPUT           => 'gs_error_NeedInput',
-				self::NEED_FILE            => 'gs_error_NeedFile',
-				self::INFO                 => 'gs_error_Info',
-				self::HANDLED              => 'gs_error_handled',
+				self::FATAL_ERROR            => 'gs_error_Fatal',
+				self::QUIT                   => 'gs_error_Quit',
+				self::INTERPRETER_EXIT       => 'gs_error_InterpreterExit',
+				self::REMAP_COLOR            => 'gs_error_Remap_Color',
+				self::EXEC_STACK_UNDERFLOW   => 'gs_error_ExecStackUnderflow',
+				self::VM_RECLAIM             => 'gs_error_VMreclaim',
+				self::NEED_INPUT             => 'gs_error_NeedInput',
+				self::NEED_FILE              => 'gs_error_NeedFile',
+				self::INFO                   => 'gs_error_Info',
+				self::HANDLED                => 'gs_error_handled',
 			};
 		}
 
 		public function description () : string {
 			return match ($this) {
-				self::OK                   => 'Execution completed successfully.',
-				self::UNKNOWN_ERROR        => 'Unknown interpreter error.',
-				self::DICT_FULL            => 'Dictionary is full.',
-				self::DICT_STACK_OVERFLOW  => 'Dictionary stack overflow.',
-				self::DICT_STACK_UNDERFLOW => 'Dictionary stack underflow.',
-				self::EXEC_STACK_OVERFLOW  => 'Execution stack overflow.',
-				self::INTERRUPT            => 'Execution interrupted.',
-				self::INVALID_ACCESS       => 'Invalid memory access.',
-				self::INVALID_EXIT         => 'Invalid exit operation.',
-				self::INVALID_FILE_ACCESS  => 'Invalid file access.',
-				self::INVALID_FONT         => 'Invalid font.',
-				self::INVALID_RESTORE      => 'Invalid restore operation.',
-				self::IO_ERROR             => 'Input/output error.',
-				self::LIMIT_CHECK          => 'Limit exceeded.',
-				self::NO_CURRENT_POINT     => 'No current point defined.',
-				self::RANGE_CHECK          => 'Range check error.',
-				self::STACK_OVERFLOW       => 'Operand stack overflow.',
-				self::STACK_UNDERFLOW      => 'Operand stack underflow.',
-				self::SYNTAX_ERROR         => 'Syntax error.',
-				self::TIMEOUT              => 'Execution timeout.',
-				self::TYPE_CHECK           => 'Type mismatch.',
-				self::UNDEFINED            => 'Undefined name.',
-				self::UNDEFINED_FILENAME   => 'Undefined file name.',
-				self::UNDEFINED_RESULT     => 'Undefined result.',
-				self::UNMATCHED_MARK       => 'Unmatched mark on stack.',
-				self::VM_ERROR             => 'Virtual memory error.',
+				self::OK                     => 'Execution completed successfully',
+				self::UNKNOWN_ERROR          => 'Unknown interpreter error',
+				self::DICT_FULL              => 'Dictionary is full',
+				self::DICT_STACK_OVERFLOW    => 'Dictionary stack overflow',
+				self::DICT_STACK_UNDERFLOW   => 'Dictionary stack underflow',
+				self::EXEC_STACK_OVERFLOW    => 'Execution stack overflow',
+				self::INTERRUPT              => 'Execution interrupted',
+				self::INVALID_ACCESS         => 'Invalid memory access',
+				self::INVALID_EXIT           => 'Invalid exit operation',
+				self::INVALID_FILE_ACCESS    => 'Invalid file access',
+				self::INVALID_FONT           => 'Invalid font',
+				self::INVALID_RESTORE        => 'Invalid restore operation',
+				self::IO_ERROR               => 'Input/output error',
+				self::LIMIT_CHECK            => 'Limit exceeded',
+				self::NO_CURRENT_POINT       => 'No current point defined',
+				self::RANGE_CHECK            => 'Range check error',
+				self::STACK_OVERFLOW         => 'Operand stack overflow',
+				self::STACK_UNDERFLOW        => 'Operand stack underflow',
+				self::SYNTAX_ERROR           => 'Syntax error',
+				self::TIMEOUT                => 'Execution timeout',
+				self::TYPE_CHECK             => 'Type mismatch',
+				self::UNDEFINED              => 'Undefined name',
+				self::UNDEFINED_FILENAME     => 'Undefined file name',
+				self::UNDEFINED_RESULT       => 'Undefined result',
+				self::UNMATCHED_MARK         => 'Unmatched mark on stack',
+				self::VM_ERROR               => 'Virtual memory error',
 
-				default => 'Internal Ghostscript interpreter condition.',
+				self::CONFIGURATION_ERROR    => 'Configuration error',
+				self::UNDEFINED_RESOURCE     => 'Undefined resource',
+				self::UNREGISTERED           => 'Unregistered',
+				self::INVALID_CONTEXT        => 'Invalid context',
+				self::INVALID_ID             => 'Invalid id',
+
+				self::PDF_STACK_OVERFLOW     => 'PDF interpreter stack overflow',
+				self::PDF_CIRCULAR_REFERENCE => 'Circular PDF reference',
+
+				self::HIT_DETECTED           => 'Hit detected',
+				self::FATAL_ERROR            => 'Fatal error',
+				self::QUIT                   => 'Quit',
+				self::INTERPRETER_EXIT       => 'Interpreter Exit',
+				self::REMAP_COLOR            => 'Remap Color',
+				self::EXEC_STACK_UNDERFLOW   => 'Exec Stack Underflow',
+				self::VM_RECLAIM             => 'VM reclaim',
+				self::NEED_INPUT             => 'Need Input',
+				self::NEED_FILE              => 'Need File',
+				self::INFO                   => 'Info',
+				self::HANDLED                => 'Handled',
+
+				default => 'Internal Ghostscript interpreter condition',
 			};
 		}
 
