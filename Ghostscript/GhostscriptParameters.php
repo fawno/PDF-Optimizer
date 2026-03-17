@@ -67,7 +67,7 @@
 	use Fawno\Ghostscript\Parameters\dUCRandBGInfo;
 	use Fawno\Ghostscript\Parameters\dUseFlateCompression;
 	use Fawno\Ghostscript\Parameters\help;
-	use Fawno\Ghostscript\Parameters\r;
+	use Fawno\Ghostscript\Parameters\resolution;
 	use Fawno\Ghostscript\Parameters\sColorConversionStrategy;
 	use Fawno\Ghostscript\Parameters\sDEVICE;
 	use Fawno\Ghostscript\Parameters\stdin;
@@ -135,7 +135,7 @@
 		use dGrayImageFilter;
 		use dMonoImageFilter;
 		use dDefaultRenderingIntent;
-		use r;
+		use resolution;
 		use dFIXEDRESOLUTION;
 		use dNOPROMPT;
 		use help;

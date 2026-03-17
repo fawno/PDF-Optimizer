@@ -35,8 +35,8 @@ php composer.phar require "fawno/pdf-optimizer"
 
   use Fawno\Ghostscript\Ghostscript;
   use Fawno\Ghostscript\GhostscriptParameters;
-	use Fawno\Ghostscript\Parameters\Enums\dPDFSETTINGSEnum;
-	use Fawno\Ghostscript\Parameters\Enums\sDEVICEEnum;
+  use Fawno\Ghostscript\Parameters\Enums\dPDFSETTINGSEnum;
+  use Fawno\Ghostscript\Parameters\Enums\sDEVICEEnum;
   use Fawno\PDFOptimizer\PDFOptimizerGhostscript;
 
   const GS_BIN = '/usr/gs/bin/gswin64c.exe';
@@ -67,8 +67,8 @@ php composer.phar require "fawno/pdf-optimizer"
 
   use Fawno\Ghostscript\GhostscriptAPI;
   use Fawno\Ghostscript\GhostscriptParameters;
-	use Fawno\Ghostscript\Parameters\Enums\dPDFSETTINGSEnum;
-	use Fawno\Ghostscript\Parameters\Enums\sDEVICEEnum;
+  use Fawno\Ghostscript\Parameters\Enums\dPDFSETTINGSEnum;
+  use Fawno\Ghostscript\Parameters\Enums\sDEVICEEnum;
   use Fawno\Ghostscript\GhostscriptArgumentEncoding;
   use Fawno\PDFOptimizer\PDFOptimizerGhostscript;
 

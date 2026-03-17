@@ -5,7 +5,7 @@
 
 	use Fawno\Ghostscript\Attributes\ShortOption;
 
-	trait r {
+	trait resolution {
 		#[ShortOption('-r')]
 		protected ?string $r = null;
 
