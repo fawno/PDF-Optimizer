@@ -71,7 +71,7 @@
 	use Fawno\Ghostscript\Parameters\sColorConversionStrategy;
 	use Fawno\Ghostscript\Parameters\sDEVICE;
 	use Fawno\Ghostscript\Parameters\stdin;
-	use Fawno\Ghostscript\Type\GSAPIParameter;
+	use Fawno\Ghostscript\Parameters\GhostscriptCustomParameter;
 	use ReflectionClass;
 	use ReflectionProperty;
 
@@ -147,7 +147,7 @@
 			return new self();
 		}
 
-		public function setParameters (GSAPIParameter ...$parameters) : self {
+		public function setParameters (GhostscriptCustomParameter ...$parameters) : self {
 			$this->parameters = array_map('trim', $parameters);
 
 			return $this;

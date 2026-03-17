@@ -76,9 +76,9 @@
 		 * @param array $arguments
 		 * @param null|string &$stdout
 		 * @param null|string &$stderr
-		 * @return int
+		 * @return GhostscriptReturnCodes
 		 */
-		public function run (array $arguments, ?string &$stdout, ?string &$stderr, ?string $stdin = null) : int {
+		public function run (array $arguments, ?string &$stdout, ?string &$stderr, ?string $stdin = null) : GhostscriptReturnCodes {
 			$arguments = implode(' ', $arguments);
 			$cmd = $this->gsbin_path . ' ' . $arguments;
 
@@ -89,7 +89,7 @@
 			];
 
 			if (false === $process = proc_open($cmd, $descriptorspec, $pipes, $this->run_cwd, $this->run_env_vars, $this->run_options)) {
-				return -1;
+				return GhostscriptReturnCodes::PROC_OPEN;
 			}
 
 			if ($stdin) {
@@ -105,6 +105,6 @@
 			$stdout = stream_get_contents($pipes[1]);
 			$stderr = stream_get_contents($pipes[2]);
 
-			return proc_close($process);
+			return GhostscriptReturnCodes::fromExitCode(proc_close($process));
 		}
 	}

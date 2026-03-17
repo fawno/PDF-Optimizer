@@ -53,7 +53,7 @@ php composer.phar require "fawno/pdf-optimizer"
 
   echo '***** OUTPUT:', PHP_EOL;
   echo $stdout, PHP_EOL;
-  if ($code) {
+  if ($code->isError()) {
     echo '***** ERROR:', PHP_EOL;
     echo $stderr, PHP_EOL;
   }
@@ -69,7 +69,7 @@ php composer.phar require "fawno/pdf-optimizer"
   use Fawno\Ghostscript\GhostscriptParameters;
 	use Fawno\Ghostscript\Parameters\Enums\dPDFSETTINGSEnum;
 	use Fawno\Ghostscript\Parameters\Enums\sDEVICEEnum;
-  use Fawno\Ghostscript\Type\GhostscriptArgumentEncoding;
+  use Fawno\Ghostscript\GhostscriptArgumentEncoding;
   use Fawno\PDFOptimizer\PDFOptimizerGhostscript;
 
   const GS_LIB = '/usr/gs/bin/gsdll64.dll';
@@ -86,7 +86,7 @@ php composer.phar require "fawno/pdf-optimizer"
 
   echo '***** OUTPUT:', PHP_EOL;
   echo $stdout, PHP_EOL;
-  if ($code) {
+  if ($code->isError()) {
     echo '***** ERROR:', PHP_EOL;
     echo $stderr, PHP_EOL;
   }

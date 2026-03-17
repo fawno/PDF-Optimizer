@@ -1,7 +1,7 @@
 <?php
 	declare(strict_types=1);
 
-	namespace Fawno\Ghostscript\Type;
+	namespace Fawno\Ghostscript;
 
 	enum GhostscriptArgumentEncoding : int {
 		case Local   = 0;

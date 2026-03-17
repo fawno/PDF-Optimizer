@@ -6,6 +6,7 @@
 	use Fawno\Ghostscript\Ghostscript;
 	use Fawno\Ghostscript\GhostscriptAPI;
 	use Fawno\Ghostscript\GhostscriptParameters;
+	use Fawno\Ghostscript\GhostscriptReturnCodes;
 
 	class PDFOptimizerGhostscript {
 		private function __construct (protected Ghostscript|GhostscriptAPI $gs) {}
@@ -14,7 +15,7 @@
 			return new self($gs);
 		}
 
-		public function optimize (?string $original, ?string $optimized, GhostscriptParameters $arguments, ?string &$stdout, ?string &$stderr) : int {
+		public function optimize (?string $original, ?string $optimized, GhostscriptParameters $arguments, ?string &$stdout, ?string &$stderr) : GhostscriptReturnCodes {
 			if ($this->gs instanceof Ghostscript) {
 				$original = $original ? '"' . $original . '"' : null;
 				$optimized = $optimized ? '"' . $optimized . '"' : null;

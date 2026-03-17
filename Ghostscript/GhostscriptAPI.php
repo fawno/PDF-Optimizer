@@ -3,8 +3,6 @@
 
 	namespace Fawno\Ghostscript;
 
-	use Fawno\Ghostscript\Type\GhostscriptArgumentEncoding;
-	use Fawno\Ghostscript\Type\GSAPIRevision;
 	use FFI;
 	use FFI\CData;
 
@@ -123,13 +121,13 @@
 		 * @param array $arguments
 		 * @param null|string &$stdout
 		 * @param null|string &$stderr
-		 * @return int
+		 * @return GhostscriptReturnCodes
 		 */
-		public function run (array $arguments, ?string &$stdout, ?string &$stderr, ?string $stdin = null) : int {
+		public function run (array $arguments, ?string &$stdout, ?string &$stderr, ?string $stdin = null) : GhostscriptReturnCodes {
 			$stdout = '';
 			$stderr = '';
 
-			$this->gsapi_new_instance();
+			$this->gsapi_new_instance()->throw();
 
 			$this->gsapi_set_stdio(
 				function(mixed $caller, CData $buffer, int $len) use (&$stdin) : int {
@@ -149,15 +147,16 @@
 					$stderr .= substr($buffer, 0, $len);
 					return $len;
 				},
-			);
+			)->throw();
 
-			$this->gsapi_set_arg_encoding($this->encoding);
-			$code = $this->gsapi_init_with_args($arguments);
+			$this->gsapi_set_arg_encoding($this->encoding)->throw();
 
-			$this->gsapi_exit();
+			$init_code = $this->gsapi_init_with_args($arguments);
+			$exit_code = $this->gsapi_exit();
+
 			$this->gsapi_delete_instance();
 
-			return $code;
+			return $init_code->isInternal() ? $exit_code : $init_code;
 		}
 
 		protected function argsPtr(array $argv): ?CData {
@@ -212,25 +211,29 @@
 		 * have been added to the structure) it will return the required
 		 * size of the structure.
 		 *
-		 * @return GSAPIRevision|int
+		 * @return GhostscriptRevision|GhostscriptReturnCodes
 		 */
-		public function gsapi_revision () : GSAPIRevision|int {
+		public function gsapi_revision () : GhostscriptRevision|GhostscriptReturnCodes {
 			$gsapi_revision = $this->ffi->new('gsapi_revision_t');
 
-			$code = $this->ffi->gsapi_revision(FFI::addr($gsapi_revision), FFI::sizeof($gsapi_revision));
+			$code = GhostscriptReturnCodes::fromExitCode(
+				$this->ffi->gsapi_revision(FFI::addr($gsapi_revision), FFI::sizeof($gsapi_revision))
+			);
 
-			return $code ?: GSAPIRevision::create($gsapi_revision);
+			return $code->isError() ? $code : GhostscriptRevision::create($gsapi_revision);
 		}
 
 		/**
 		 * Create a new instance of Ghostscript.
 		 *
-		 * @return int
+		 * @return GhostscriptReturnCodes
 		 */
-		public function gsapi_new_instance () : int {
+		public function gsapi_new_instance () : GhostscriptReturnCodes {
 			$this->instance = $this->ffi->new('void *');
 
-			return $this->ffi->gsapi_new_instance(FFI::addr($this->instance), null);
+			return GhostscriptReturnCodes::fromExitCode(
+				$this->ffi->gsapi_new_instance(FFI::addr($this->instance), null)
+			);
 		}
 
 		/**
@@ -259,10 +262,12 @@
 		 * @param object $stdin_fn function(mixed $caller_handle, CData $buffer, int $len) : int { return $len; }
 		 * @param object $stdout_fn function(mixed $caller_handle, string $buffer, int $len) : int { return $len; }
 		 * @param object $stderr_fn function(mixed $caller_handle, string $buffer, int $len) : int { return $len; }
-		 * @return int
+		 * @return GhostscriptReturnCodes
 		 */
-		public function gsapi_set_stdio (?object $stdin_fn = null, ?object $stdout_fn = null, ?object $stderr_fn = null) : int  {
-			return $this->ffi->gsapi_set_stdio($this->instance, $stdin_fn, $stdout_fn, $stderr_fn);
+		public function gsapi_set_stdio (?object $stdin_fn = null, ?object $stdout_fn = null, ?object $stderr_fn = null) : GhostscriptReturnCodes  {
+			return GhostscriptReturnCodes::fromExitCode(
+				$this->ffi->gsapi_set_stdio($this->instance, $stdin_fn, $stdout_fn, $stderr_fn)
+			);
 		}
 
 		/**
@@ -276,10 +281,12 @@
 		 * this function) is now deprecated!
 		 *
 		 * @param GhostscriptArgumentEncoding $encoding
-		 * @return int
+		 * @return GhostscriptReturnCodes
 		 */
-		public function gsapi_set_arg_encoding (GhostscriptArgumentEncoding $encoding) : int {
-			return $this->ffi->gsapi_set_arg_encoding($this->instance, $encoding->value);
+		public function gsapi_set_arg_encoding (GhostscriptArgumentEncoding $encoding) : GhostscriptReturnCodes {
+			return GhostscriptReturnCodes::fromExitCode(
+				$this->ffi->gsapi_set_arg_encoding($this->instance, $encoding->value)
+			);
 		}
 
 		/**
@@ -297,14 +304,16 @@
 		 *    with gsapi_exit().
 		 *
 		 * @param array $arguments
-		 * @return int
+		 * @return GhostscriptReturnCodes
 		 */
-		public function gsapi_init_with_args (array $arguments) : int {
+		public function gsapi_init_with_args (array $arguments) : GhostscriptReturnCodes {
 			array_unshift($arguments, '');
 			$argc = count($arguments);
 			$argv = $this->argsPtr($arguments);
 
-			return $this->ffi->gsapi_init_with_args($this->instance, $argc, $argv);
+			return GhostscriptReturnCodes::fromExitCode(
+				$this->ffi->gsapi_init_with_args($this->instance, $argc, $argv)
+			);
 		}
 
 		/**
@@ -313,9 +322,11 @@
 		 * This must be called on shutdown if gsapi_init_with_args()
 		 * has been called, and just before gsapi_delete_instance().
 		 *
-		 * @return int
+		 * @return GhostscriptReturnCodes
 		 */
-		public function gsapi_exit () : int {
-			return $this->ffi->gsapi_exit($this->instance);
+		public function gsapi_exit () : GhostscriptReturnCodes {
+			return GhostscriptReturnCodes::fromExitCode(
+				$this->ffi->gsapi_exit($this->instance)
+			);
 		}
 	}

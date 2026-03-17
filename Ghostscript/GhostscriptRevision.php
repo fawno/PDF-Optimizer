@@ -1,11 +1,11 @@
 <?php
 	declare(strict_types=1);
 
-	namespace Fawno\Ghostscript\Type;
+	namespace Fawno\Ghostscript;
 
 	use FFI\CData;
 
-	readonly class GSAPIRevision {
+	readonly class GhostscriptRevision {
 		private function __construct (
 			public string $product,
 			public string $copyright,
@@ -13,7 +13,7 @@
 			public int $revisiondate
 		) {}
 
-		public static function create (CData $gsapi_revision)  : GSAPIRevision {
+		public static function create (CData $gsapi_revision)  : GhostscriptRevision {
 			return new self(
 				$gsapi_revision->product,
 				$gsapi_revision->copyright,
