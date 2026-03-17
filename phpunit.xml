@@ -2,10 +2,8 @@
 <phpunit
   bootstrap="vendor/autoload.php"
   colors="true"
-  displayDetailsOnTestsThatTriggerDeprecations="true"
-  displayDetailsOnTestsThatTriggerErrors="true"
-  displayDetailsOnTestsThatTriggerNotices="true"
-  displayDetailsOnTestsThatTriggerWarnings="true"
+  cacheResult ="false"
+  displayDetailsOnAllIssues="true"
 >
     <php>
         <const name="_DEBUG_LEVEL" value="0"/>
