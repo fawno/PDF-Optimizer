@@ -13,16 +13,18 @@
 		 * High-level (vector) file formats
 		 */
 
-		/** EPS output (like PostScript Distillery) */
+		/** The eps2write device outputs encapsulated postscript. */
 		case EPSWRITE = 'eps2write';
-		/** PDF output (like Adobe Acrobat Distiller) */
+		/** The pdfwrite device outputs PDF. */
 		case PDFWRITE = 'pdfwrite';
-		/** PostScript output (like PostScript Distillery) */
+		/** The ps2write device outputs postscript language level 2. It is recommnded that this device is used for PostScript output. There is no longer any support for creating PostScript level 1 output. */
 		case PSWRITE = 'ps2write';
-		/** Black-and-white PCL XL */
+		/** The pxlmono and pxlcolor devices output HP PCL-XL, a graphic language understood by many recent laser printers. */
 		case PXLMONO = 'pxlmono';
 		/** Color PCL XL */
 		case PXLCOLOR = 'pxlcolor';
+		/** The txtwrite device will output the text contained in the original document as Unicode. */
+		case TXTWRITE = 'txtwrite';
 
 		/**
 		 * Other raster file formats and devices
@@ -120,12 +122,47 @@
 		case PSGRAY = 'psgray';
 		/** PostScript (Level 2) 24-bit color image */
 		case PSRGB = 'psrgb';
-		/** TIFF 12-bit RGB, no compression */
-		case TIFF12 = 'tiff12nc';
-		/** TIFF 24-bit RGB, no compression (NeXT standard format) */
-		case TIFF24 = 'tiff24nc';
-		/** TIFF LZW (tag = 5) (monochrome) */
+
+		/**
+		 * TIFF file formats
+		 */
+
+		/** TIFF: Produces 8-bit gray output. */
+		case TIFFGRAY = 'tiffgray';
+		/** TIFF: Produces 12-bit RGB output (4 bits per component). */
+		case TIFF12NC = 'tiff12nc';
+		/** TIFF: Produces 24-bit RGB output (8 bits per component). */
+		case TIFF24NC = 'tiff24nc';
+		/** TIFF: Produces 48-bit RGB output (16 bits per component). */
+		case TIFF48NC = 'tiff48nc';
+		/** TIFF: Produces 32-bit CMYK output (8 bits per component). */
+		case TIFF32NC = 'tiff32nc';
+		/** TIFF: Produces 64-bit CMYK output (16 bits per component). */
+		case TIFF64NC = 'tiff64nc';
+		/** TIFF: LZW-compatible (tag = 5) compression. */
 		case TIFFLZW = 'tifflzw';
-		/** TIFF PackBits (tag = 32773) (monochrome) */
+		/** TIFF: PackBits (tag = 32773) compression. */
 		case TIFFPACK = 'tiffpack';
+		/** TIFF: Sep */
+		case TIFFSEP = 'tiffsep';
+		/** TIFF: tiffsep1 */
+		case TIFFSEP1 = 'tiffsep1';
+		/** TIFF: tiffscaled */
+		case TIFFSCALED = 'tiffscaled';
+		/** TIFF: tiffscaled4 */
+		case TIFFSCALED4 = 'tiffscaled4';
+		/** TIFF: tiffscaled8 */
+		case TIFFSCALED8 = 'tiffscaled8';
+		/** TIFF: tiffscaled24 */
+		case TIFFSCALED24 = 'tiffscaled24';
+		/** TIFF: tiffscaled32 */
+		case TIFFSCALED32 = 'tiffscaled32';
+		/** TIFF: G3 fax encoding with no EOLs. */
+		case TIFFCRLE = 'tiffcrle';
+		/** TIFF: G3 fax encoding with EOLs. */
+		case TIFFG3 = 'tiffg3';
+		/** TIFF: 2-D G3 fax encoding. */
+		case TIFFG32D = 'tiffg32d';
+		/** TIFF: G4 fax encoding. */
+		case TIFFG4 = 'tiffg4';
 	}
